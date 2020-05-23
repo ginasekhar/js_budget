@@ -33,7 +33,7 @@ body {
 
 .top {
     height: 40vh;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(gardenofeden.png);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(michael-longmire-3Mu0iQgLQto-unsplash.jpg);
     background-size: cover;
     background-position: center;
     position: relative;
@@ -71,11 +71,11 @@ body {
 
 .budget__income {
     margin-bottom: 10px;
-    background-color: #28B9B5;
+    background-color: #85bb65;
 }
 
 .budget__expenses {
-    background-color: #FF5049;
+    background-color: #b87333;
 }
 
 .budget__income--text,
@@ -156,7 +156,7 @@ body {
     font-size: 35px;
     background: none;
     border: none;
-    color: #28B9B5;
+    color: #8c8c8c;
     cursor: pointer;
     display: inline-block;
     vertical-align: middle;
@@ -170,7 +170,7 @@ body {
 .add__description:focus,
 .add__value:focus {
     outline: none;
-    border: 1px solid #28B9B5;
+    border: 1px solid #8c8c8c;
 }
 
 .add__btn:focus { outline: none; }
@@ -233,13 +233,13 @@ h2 {
 
 .income .item__value,
 .income .item__delete--btn {
-    color: #28B9B5;
+    color: rgb(40, 185, 117);
 }
 
 .expenses .item__value,
 .expenses .item__percentage,
 .expenses .item__delete--btn {
-    color: #FF5049;
+    color: rgb(255, 140, 73);
 }
 
 
