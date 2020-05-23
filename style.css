@@ -233,13 +233,13 @@ h2 {
 
 .income .item__value,
 .income .item__delete--btn {
-    color: rgb(40, 185, 117);
+    color: green;
 }
 
 .expenses .item__value,
 .expenses .item__percentage,
 .expenses .item__delete--btn {
-    color: rgb(255, 140, 73);
+    color:rgb(167, 24, 24);
 }
 
 
