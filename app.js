@@ -1,4 +1,4 @@
-const budgetController = (function () {
+const balanceController = (function () {
   const Expense = function(id, description, value) {
     this.id = id;
     this.description = description;
@@ -11,6 +11,14 @@ const budgetController = (function () {
     this.value = value;
   }
 
+  const calculateTotal = function(type) {
+    let sum = 0;
+    data.allItems[type].forEach(function(cur) {
+      sum += cur.value;
+    });
+    data.totals[type] = sum;
+  }
+
   let data = {
     allItems : {
       exp: [],
@@ -19,7 +27,9 @@ const budgetController = (function () {
     totals: {
       exp: 0,
       inc: 0
-    }
+    },
+    balance: 0,
+    percentage: -1
   };
 
   return {
@@ -43,6 +53,32 @@ const budgetController = (function () {
       data.allItems[type].push(newItem);
       
       return newItem;
+    },
+
+    calculateBalance : function() {
+      //calculate total income and expenses
+      calculateTotal('exp');
+      calculateTotal('inc');
+
+      //calculate balance (income - expense)
+      data.balance = data.totals.inc - data.totals.exp;
+
+      //calculate expense as percent of income
+      if (data.totals.inc > 0) {
+        data.percentage = Math.round((data.totals.exp/data.totals.inc) * 100);
+      } else {
+        data.percentage = -1;
+      }
+
+    },
+
+    getBalance : function() {
+      return {
+        balance: data.balance,
+        totalInc: data.totals.inc,
+        totalExp: data.totals.exp,
+        percentage : data.percentage
+      }
     },
 
     testing : function() {
@@ -69,7 +105,7 @@ const UIController = (function () {
       return {
         type: document.querySelector(DOMstrings.inputType).value,
         description: document.querySelector(DOMstrings.inputDescription).value,
-        value:document.querySelector(DOMstrings.inputValue).value 
+        value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
       }; 
     },
 
@@ -113,7 +149,7 @@ const UIController = (function () {
 
 })();
 
-const controller = (function (budgetCtrl, UICtrl) {
+const controller = (function (balanceCtrl, UICtrl) {
   
   const setupEventListeners = function () {
 
@@ -129,23 +165,36 @@ const controller = (function (budgetCtrl, UICtrl) {
       })
 
   }
+  const updateBalance = function() {
+    //5. Calculate balance
+    balanceCtrl.calculateBalance();
+
+    //2. Return the balance
+    let balance = balanceCtrl.getBalance();
+
+    //6. Display balance on UI
+     console.log(balance);
+  }
 
   const ctrlAddItem = function() {
     let input, newItem;
     // 1. Get field input data
-        input = UICtrl.getInput();
-        console.log(input);
+    input = UICtrl.getInput();
+    
+    if(input.description !== "" && !isNaN(input.value) && input.value > 0) {
+      // 2.  Add item to balance controller
+      newItem = balanceCtrl.addItem(input.type, input.description, input.value)
+      //3. Add item to UI
+      UICtrl.addListItem(newItem, input.type)
+
+      //4.  Clear fields
+      UICtrl.clearFields();
+      
+      //5. Calculate and update balance
+      updateBalance();
+
+    }
         
-        // 2.  Add item to budget controller
-        newItem = budgetCtrl.addItem(input.type, input.description, input.value)
-        //3. Add item to UI
-        UICtrl.addListItem(newItem, input.type)
-
-        //4.  Clear fields
-        UICtrl.clearFields();
-        //5. Calculate budget
-
-        //6. Display budget on UI
     
   };
 
@@ -156,6 +205,6 @@ const controller = (function (budgetCtrl, UICtrl) {
     }
   }
     
-})(budgetController, UIController);
+})(balanceController, UIController);
 
 controller.init();
